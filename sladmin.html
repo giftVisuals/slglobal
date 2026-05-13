@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SL Global Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #F76B1C;
+      --orange-dark: #D95A0D;
+      --blue: #1A3A6B;
+      --blue-mid: #2255A0;
+      --white: #FFFFFF;
+      --off-white: #F5F7FA;
+      --gray-100: #EEF1F6;
+      --gray-200: #D8DEE9;
+      --gray-400: #9AA3B2;
+      --gray-600: #5A6478;
+      --gray-800: #2D3444;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+      --radius: 10px;
+      --radius-lg: 16px;
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--off-white);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+    }
+
+    .login-header {
+      background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+      padding: 32px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .login-logo span { color: var(--orange); }
+
+    .login-subtitle {
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+    }
+
+    .login-body { padding: 32px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 7px;
+    }
+    .form-group input {
+      width: 100%;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .form-group input:focus { border-color: var(--blue); }
+
+    .login-error {
+      color: #E53E3E;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .login-error.visible { display: block; }
+
+    .login-btn {
+      width: 100%;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .login-btn:hover { background: var(--orange-dark); }
+    .login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    /* ── ADMIN LAYOUT ── */
+    .admin-layout {
+      display: none;
+      min-height: 100vh;
+    }
+    .admin-layout.active { display: flex; }
+
+    /* ── SIDEBAR ── */
+  .admin-sidebar {
+  width: 240px;
+  background: var(--blue);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+
+.admin-sidebar.collapsed {
+  transform: translateX(-240px);
+}
+    .admin-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .admin-brand-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    .admin-brand-name span { color: var(--orange); }
+    .admin-brand-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    .admin-nav { padding: 16px 0; flex: 1; overflow-y: auto; }
+
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      border-left: 3px solid transparent;
+    }
+
+    .admin-nav-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+    }
+
+    .admin-nav-item.active {
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      border-left-color: var(--orange);
+    }
+
+    .admin-signout {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .signout-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 10px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .signout-btn:hover { background: rgba(255,255,255,0.15); color: var(--white); }
+
+    /* ── MAIN CONTENT ── */
+ .admin-main {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+  min-width: 0;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.admin-main.expanded {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-240px);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-main {
+    margin-left: 0;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+    .admin-topbar {
+      background: var(--white);
+      border-bottom: 2px solid var(--orange);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .admin-page-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .admin-user-badge {
+      background: var(--blue);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    .admin-content { padding: 14px; flex: 1; overflow-x: auto; overflow-y: auto; width: 100%; }
+
+    /* ── PAGES ── */
+    .admin-page { display: none; }
+    .admin-page.active { display: block; }
+
+    /* ── STATS CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform var(--transition);
+    }
+
+    .stat-card:hover { transform: translateY(-2px); }
+
+    .stat-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .stat-info { flex: 1; }
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--gray-400); font-weight: 600; margin-top: 4px; }
+
+    /* ── TABLE ── */
+    .table-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-head {
+      padding: 18px 24px;
+      border-bottom: 2px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+    th {
+      background: var(--off-white);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-600);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--gray-800);
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--off-white); }
+
+    .product-thumb {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: var(--gray-100);
+      padding: 4px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-primary { background: var(--orange); color: var(--white); }
+    .btn-primary:hover { background: var(--orange-dark); }
+    .btn-blue { background: var(--blue); color: var(--white); }
+    .btn-blue:hover { background: var(--blue-mid); }
+    .btn-danger { background: #FFF5F5; color: #E53E3E; border: 1px solid #FED7D7; }
+    .btn-danger:hover { background: #E53E3E; color: var(--white); }
+    .btn-success { background: #F0FFF4; color: #276749; border: 1px solid #9AE6B4; }
+
+    /* ── PRODUCT FORM ── */
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .form-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group-admin { margin-bottom: 0; }
+    .form-group-admin label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 7px;
+    }
+
+    .form-group-admin input,
+    .form-group-admin select,
+    .form-group-admin textarea {
+      width: 100%;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color var(--transition);
+      background: var(--white);
+    }
+
+    .form-group-admin input:focus,
+    .form-group-admin select:focus,
+    .form-group-admin textarea:focus { border-color: var(--blue); }
+
+    .form-group-admin textarea { resize: vertical; min-height: 90px; }
+    /* ── UPLOAD BOX ── */
+.upload-box {
+  border: 2px dashed var(--gray-200);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition);
+  background: var(--off-white);
+}
+
+.upload-box:hover {
+  border-color: var(--blue);
+  background: #EEF3FB;
+}
+
+.upload-box input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+}
+
+.upload-hint {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--gray-400);
+}
+
+.upload-hint p {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-600);
+}
+
+.upload-hint span {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.image-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.preview-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--gray-200);
+}
+
+.preview-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #E53E3E;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.upload-progress {
+  margin-top: 12px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 10px 14px;
+}
+
+.upload-progress-bar {
+  height: 6px;
+  background: var(--orange);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+  margin-bottom: 6px;
+}
+
+#uploadProgressText {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+#videoPreview {
+  margin-top: 12px;
+}
+
+#videoPreview video {
+  width: 100%;
+  max-height: 200px;
+  border-radius: 10px;
+  background: #000;
+}
+
+    .form-full { grid-column: 1 / -1; }
+/* ── MENU TOGGLE ── */
+.menu-toggle {
+  background: var(--off-white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--blue);
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.menu-toggle:hover {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 99;
+}
+.sidebar-overlay.visible { display: block; }
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gray-800);
+      color: var(--white);
+      padding: 13px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-lg);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 4px solid #48BB78; }
+    .toast.error { border-left: 4px solid #E53E3E; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-open { background: #FFF5F5; color: #E53E3E; }
+    .badge-resolved { background: #F0FFF4; color: #276749; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px;
+      color: var(--gray-400);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN PAGE ═══ -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">SL <span>Global</span></div>
+      <div class="login-subtitle">Admin Panel — Authorized Access Only</div>
+    </div>
+    <div class="login-body">
+      <div class="login-error" id="loginError">Invalid email or password.</div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="adminEmail" placeholder="admin@slglobal.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="Your password" />
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="adminLogin()">Sign In to Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN LAYOUT ═══ -->
+<div class="admin-layout" id="adminLayout">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-brand">
+      <div class="admin-brand-name">SL <span>Global</span></div>
+      <div class="admin-brand-sub">Admin Dashboard</div>
+    </div>
+
+    <nav class="admin-nav">
+      <button class="admin-nav-item active" onclick="showAdminPage('dashboard', this)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="admin-nav-item" onclick="showAdminPage('products', this)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+        Products
+      </button>
+      <button class="admin-nav-item" onclick="showAdminPage('support', this)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Support Messages
+      </button>
+      <button class="admin-nav-item" onclick="showAdminPage('users', this)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Users
+      </button>
+      <button class="admin-nav-item" onclick="showAdminPage('orders', this)">
+  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+  Orders
+</button>
+<button class="admin-nav-item" onclick="showAdminPage('withdrawals', this)">
+  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+  Withdrawals
+</button>
+    </nav>
+
+    <div class="admin-signout">
+      <button class="signout-btn" onclick="adminSignOut()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="admin-page-title" id="adminPageTitle">Dashboard</div>
+  </div>
+  <div class="admin-user-badge" id="adminUserBadge">Admin</div>
+</div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="admin-page active" id="page-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-num" id="dashProducts">-</div>
+              <div class="stat-label">Total Products</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-num" id="dashSupport">-</div>
+              <div class="stat-label">Support Messages</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-num" id="dashUsers">-</div>
+              <div class="stat-label">Registered Users</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <div class="table-title">Recent Support Messages</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="dashSupportTable">
+              <tr><td colspan="4" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="admin-page" id="page-products">
+        <div class="form-card">
+          <div class="form-card-title" id="productFormTitle">Add New Product</div>
+          <div class="form-grid">
+            <div class="form-group-admin">
+              <label>Product Name</label>
+              <input type="text" id="pName" placeholder="e.g. iPhone 15 Pro Max" />
+            </div>
+            <div class="form-group-admin">
+              <label>Category</label>
+              <select id="pCategory">
+                <option value="phones">Phones</option>
+                <option value="accessories">Accessories</option>
+                <option value="tablets">Tablets</option>
+                <option value="laptops">Laptops</option>
+                <option value="deals">Deals</option>
+              </select>
+            </div>
+            <div class="form-group-admin">
+              <label>Price ₦</label>
+              <input type="number" id="pPrice" placeholder="e.g. 5000000" />
+            </div>
+            <div class="form-group-admin">
+              <label>Discount (%)</label>
+              <input type="number" id="pDiscount" placeholder="e.g. 10" />
+            </div>
+            <div class="form-group-admin">
+  <label>Stock Quantity</label>
+  <input type="number" id="pStock" placeholder="e.g. 20" />
+</div>
+<div class="form-group-admin">
+  <label>Storage</label>
+  <input type="text" id="pStorage" placeholder="e.g. 128GB" />
+</div>
+<div class="form-group-admin">
+  <label>Battery Health</label>
+  <input type="text" id="pBattery" placeholder="e.g. 85%" />
+</div>
+<div class="form-group-admin">
+  <label>RAM</label>
+  <input type="text" id="pRam" placeholder="e.g. 8GB" />
+</div>
+<div class="form-group-admin">
+  <label>Display</label>
+  <input type="text" id="pDisplay" placeholder="e.g. 6.1-inch" />
+</div>
+            <div class="form-group-admin form-full">
+  <label>Product Images (you can select multiple)</label>
+  <div class="form-group-admin form-full">
+  <label>Paste Image URLs (one per line)</label>
+<textarea id="pImageUrl" placeholder="Paste one image link per line&#10;e.g. https://i.postimg.cc/image1.jpg&#10;https://i.postimg.cc/image2.jpg" style="width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;outline:none;min-height:100px;resize:vertical;"></textarea>" />
+</div>
+  <div class="upload-box">
+    <input type="file" id="pImages" accept="image/*" multiple onchange="previewImages(this)" />
+    <div class="upload-hint">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>Tap to select images</p>
+      <span>JPG, PNG, WEBP supported</span>
+    </div>
+  </div>
+  <div class="image-previews" id="imagePreviews"></div>
+  <div class="upload-progress" id="uploadProgress" style="display:none;">
+    <div class="upload-progress-bar" id="uploadProgressBar"></div>
+    <span id="uploadProgressText">Uploading...</span>
+  </div>
+</div>
+
+<div class="form-group-admin form-full">
+  <div class="form-group-admin form-full">
+  <label>Or Paste Video URL</label>
+  <input type="text" id="pVideoUrl" placeholder="e.g. https://i.postimg.cc/yourvideo.mp4" />
+</div>
+  <div class="upload-box">
+    <input type="file" id="pVideo" accept="video/*" onchange="previewVideo(this)" />
+    <div class="upload-hint">
+      <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      <p>Tap to select video</p>
+      <span>MP4, MOV supported</span>
+    </div>
+  </div>
+  <div id="videoPreview"></div>
+</div>
+
+<div class="form-group-admin form-full">
+  <label>Description</label>
+  <textarea id="pDescription" placeholder="Product description..."></textarea>
+</div>
+          </div>
+          <div style="margin-top:20px; display:flex; gap:12px;">
+            <button class="btn btn-primary" id="saveProductBtn" onclick="saveProduct()">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save Product
+            </button>
+            <button class="btn btn-blue" onclick="resetProductForm()" id="cancelEditBtn" style="display:none;">Cancel Edit</button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <div class="table-title">All Products</div>
+            <input type="text" placeholder="Search products..." onkeyup="searchAdminProducts(this.value)" style="border:1.5px solid var(--gray-200);border-radius:7px;padding:8px 12px;font-family:'Barlow',sans-serif;font-size:13px;outline:none;width:220px;" />
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTable">
+              <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUPPORT -->
+      <div class="admin-page" id="page-support">
+        <div class="table-card">
+          <div class="table-head">
+            <div class="table-title">Support Messages</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="supportTable">
+              <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="admin-page" id="page-users">
+        <div class="table-card">
+          <div class="table-head">
+            <div class="table-title">Registered Users</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>User ID</th>
+              </tr>
+            </thead>
+            <tbody id="usersTable">
+              <tr><td colspan="3" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ORDERS -->
+<div class="admin-page" id="page-orders">
+  <div class="table-card">
+    <div class="table-head">
+      <div class="table-title">Orders</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Product</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTable">
+        <tr><td colspan="6" class="empty-state">No orders yet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- WITHDRAWALS -->
+<div class="admin-page" id="page-withdrawals">
+  <div class="table-card">
+    <div class="table-head">
+      <div class="table-title">Withdrawal Requests</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Partner</th>
+          <th>Amount</th>
+          <th>Bank</th>
+          <th>Account</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="withdrawalsTable">
+        <tr><td colspan="6" class="empty-state">No withdrawal requests yet.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword,
+    onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, collection, getDocs,
+    addDoc, updateDoc, deleteDoc,
+    doc, serverTimestamp, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcIQmeqh8NQ72X7hUDL0JrjMpyIB1750w",
+    authDomain: "slglobal-efc79.firebaseapp.com",
+    projectId: "slglobal-efc79",
+    storageBucket: "slglobal-efc79.firebasestorage.app",
+    messagingSenderId: "13344924891",
+    appId: "1:13344924891:web:cb682b3c2bf1069375d8fe"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ── ADMIN EMAILS (add your admin email here) ──
+  const ADMIN_EMAILS = ['admin@slglobal.com', 'giftupdate01@gmail.com'];
+
+  let allAdminProducts = [];
+  let editingProductId = null;
+
+  // ── AUTH ──
+  onAuthStateChanged(auth, (user) => {
+    if (user && ADMIN_EMAILS.includes(user.email)) {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('adminLayout').classList.add('active');
+      document.getElementById('adminUserBadge').textContent = user.displayName || user.email;
+     loadDashboard();
+loadProducts();
+loadSupport();
+loadUsers();
+loadOrders();
+loadWithdrawals();
+    } else if (user) {
+      showToast('Access denied. Not an admin account.', 'error');
+      signOut(auth);
+    } else {
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('adminLayout').classList.remove('active');
+    }
+  });
+  const IMGBB_KEY = '3ba1a55964c6f25793b8c9bd780ce256';
+let uploadedImageUrls = [];
+let uploadedVideoUrl = '';
+let imagesToRemove = [];
+
+window.previewImages = (input) => {
+  const files = Array.from(input.files);
+  const container = document.getElementById('imagePreviews');
+  container.innerHTML = '';
+  uploadedImageUrls = [];
+
+  files.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'preview-wrap';
+      wrap.id = 'preview-' + index;
+      wrap.innerHTML = `
+        <img src="${e.target.result}" />
+        <button class="preview-remove" onclick="removeImage(${index})">×</button>
+      `;
+      container.appendChild(wrap);
+    };
+    reader.readAsDataURL(file);
+  });
+};
+
+window.removeImage = (index) => {
+  const wrap = document.getElementById('preview-' + index);
+  if (wrap) wrap.remove();
+};
+
+window.previewVideo = (input) => {
+  const file = input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  document.getElementById('videoPreview').innerHTML = `
+    <video src="${url}" controls></video>
+  `;
+};
+async function convertImagesToBase64(files) {
+  const urls = [];
+  for (const file of files) {
+    await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        urls.push(e.target.result);
+        resolve();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  return urls;
+}
+async function uploadImagesToImgBB(files) {
+  const progress = document.getElementById('uploadProgress');
+  const bar = document.getElementById('uploadProgressBar');
+  const text = document.getElementById('uploadProgressText');
+  progress.style.display = 'block';
+  const urls = [];
+
+  for (let i = 0; i < files.length; i++) {
+    text.textContent = `Uploading image ${i + 1} of ${files.length}...`;
+    bar.style.width = ((i / files.length) * 100) + '%';
+
+    const formData = new FormData();
+    formData.append('image', files[i]);
+
+    try {
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.success) urls.push(data.data.url);
+    } catch (e) {
+      console.error('Image upload failed:', e);
+    }
+  }
+
+  bar.style.width = '100%';
+  text.textContent = 'Upload complete!';
+  setTimeout(() => { progress.style.display = 'none'; }, 2000);
+  return urls;
+}
+
+async function uploadVideoToImgBB(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+  try {
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) return data.data.url;
+  } catch (e) {
+    console.error('Video upload failed:', e);
+  }
+  return '';
+}
+window.toggleSidebar = () => {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('visible');
+};
+  window.adminLogin = async () => {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pw = document.getElementById('adminPassword').value;
+    const btn = document.getElementById('loginBtn');
+    const err = document.getElementById('loginError');
+    err.classList.remove('visible');
+    if (!email || !pw) { err.textContent = 'Please fill in all fields.'; err.classList.add('visible'); return; }
+    btn.disabled = true; btn.textContent = 'Signing in...';
+    try {
+      await signInWithEmailAndPassword(auth, email, pw);
+    } catch (e) {
+      err.textContent = 'Invalid email or password.';
+      err.classList.add('visible');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Sign In to Admin';
+    }
+  };
+
+  window.adminSignOut = async () => {
+    await signOut(auth);
+  };
+
+  // ── NAVIGATION ──
+  window.showAdminPage = (page, el) => {
+    document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    if (el) el.classList.add('active');
+    const titles = { dashboard: 'Dashboard', products: 'Products', support: 'Support Messages', users: 'Users', orders: 'Orders', withdrawals: 'Withdrawals' };
+    document.getElementById('adminPageTitle').textContent = titles[page] || page;
+  };
+
+  // ── DASHBOARD ──
+  async function loadDashboard() {
+    const [products, support, users] = await Promise.all([
+      getDocs(collection(db, 'products')),
+      getDocs(collection(db, 'support')),
+      getDocs(collection(db, 'users'))
+    ]);
+    document.getElementById('dashProducts').textContent = products.size;
+    document.getElementById('dashSupport').textContent = support.size;
+    document.getElementById('dashUsers').textContent = users.size;
+
+    const rows = support.docs.slice(0, 5).map(d => {
+      const s = d.data();
+      return `<tr>
+        <td>${esc(s.name || '-')}</td>
+        <td>${esc(s.email || '-')}</td>
+        <td>${esc((s.message || '').substring(0, 60))}...</td>
+        <td><span class="badge badge-${s.status === 'resolved' ? 'resolved' : 'open'}">${s.status || 'open'}</span></td>
+      </tr>`;
+    }).join('') || `<tr><td colspan="4" class="empty-state">No messages yet.</td></tr>`;
+
+    document.getElementById('dashSupportTable').innerHTML = rows;
+  }
+
+  // ── PRODUCTS ──
+  async function loadProducts() {
+    const snap = await getDocs(collection(db, 'products'));
+    allAdminProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProductsTable(allAdminProducts);
+  }
+
+  function renderProductsTable(list) {
+    const tbody = document.getElementById('productsTable');
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No products yet. Add one above!</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(p => {
+      const img = Array.isArray(p.images) ? p.images[0] : (p.image || p.imageUrl || '');
+      return `<tr>
+        <td>${img ? `<img class="product-thumb" src="${esc(img)}" alt="" />` : '-'}</td>
+        <td><strong>${esc(p.name || '-')}</strong></td>
+        <td>${esc(p.category || '-')}</td>
+        <td>₦${Number(p.price || 0).toLocaleString('en-NG')}</td>
+        <td>${p.stock || '-'}</td>
+        <td style="display:flex;gap:8px;">
+          <button class="btn btn-blue" onclick="editProduct('${p.id}')">Edit</button>
+          <button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.searchAdminProducts = (query) => {
+    const filtered = allAdminProducts.filter(p =>
+      (p.name || '').toLowerCase().includes(query.toLowerCase())
+    );
+    renderProductsTable(filtered);
+  };
+
+  window.saveProduct = async () => {
+    const name = document.getElementById('pName').value.trim();
+    const category = document.getElementById('pCategory').value;
+    const price = document.getElementById('pPrice').value;
+    const discount = document.getElementById('pDiscount').value;
+    const stock = document.getElementById('pStock').value;
+    const description = document.getElementById('pDescription').value.trim();
+  const storage = document.getElementById('pStorage').value.trim();
+    const battery = document.getElementById('pBattery').value.trim();
+    const ram = document.getElementById('pRam').value.trim();
+    const display = document.getElementById('pDisplay').value.trim();
+    const imageFiles = document.getElementById('pImages').files;
+    const videoFile = document.getElementById('pVideo').files[0];
+
+    if (!name || !price) { showToast('Name and price are required.', 'error'); return; }
+
+    const btn = document.getElementById('saveProductBtn');
+    btn.disabled = true; btn.textContent = 'Uploading media...';
+
+    const manualUrls = document.getElementById('pImageUrl').value.trim();
+let imageUrls = manualUrls ? manualUrls.split('\n').map(u => u.trim()).filter(u => u) : (uploadedImageUrls.length ? uploadedImageUrls : []);
+    const videoInput = document.getElementById('pVideoUrl') ? document.getElementById('pVideoUrl').value.trim() : '';
+let videoUrl = videoInput || uploadedVideoUrl || '';
+
+    if (imageFiles.length > 0) {
+  imageUrls = await convertImagesToBase64(Array.from(imageFiles));
+}
+
+    if (videoFile) {
+      btn.textContent = 'Uploading video...';
+      videoUrl = await uploadVideoToImgBB(videoFile);
+    }
+
+    btn.textContent = 'Saving...';
+
+    const data = {
+      name, category,
+      price: Number(price),
+      discount: Number(discount) || 0,
+      stock: Number(stock) || 0,
+      storage, battery, ram, display,
+      images: imageUrls,
+      videoUrl: videoUrl,
+      description,
+      updatedAt: serverTimestamp()
+    };
+
+    try {
+      if (editingProductId) {
+        await updateDoc(doc(db, 'products', editingProductId), data);
+        showToast('Product updated!', 'success');
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, 'products'), data);
+        showToast('Product added!', 'success');
+      }
+      resetProductForm();
+      loadProducts();
+      loadDashboard();
+    } catch (e) {
+      console.error(e);
+      showToast('Error saving product.', 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Save Product';
+    }
+  };
+
+  window.editProduct = (id) => {
+    const p = allAdminProducts.find(x => x.id === id);
+    if (!p) return;
+    editingProductId = id;
+    document.getElementById('pName').value = p.name || '';
+    document.getElementById('pCategory').value = p.category || 'phones';
+    document.getElementById('pPrice').value = p.price || '';
+    document.getElementById('pDiscount').value = p.discount || '';
+    document.getElementById('pStock').value = p.stock || '';
+    uploadedImageUrls = Array.isArray(p.images) ? p.images : [];
+ 
+ document.getElementById('pStorage').value = p.storage || '';
+    document.getElementById('pBattery').value = p.battery || '';
+    document.getElementById('pRam').value = p.ram || '';
+    document.getElementById('pDisplay').value = p.display || ''; 
+      document.getElementById('pDescription').value = p.description || '';
+    document.getElementById('productFormTitle').textContent = 'Edit Product';
+    document.getElementById('cancelEditBtn').style.display = 'inline-flex';
+    document.querySelector('#page-products').scrollIntoView({ behavior: 'smooth' });
+    const navItems = document.querySelectorAll('.admin-nav-item');
+showAdminPage('products', navItems[1]);
+  };
+
+  window.deleteProduct = async (id) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    try {
+      await deleteDoc(doc(db, 'products', id));
+      showToast('Product deleted.', 'success');
+      loadProducts();
+      loadDashboard();
+    } catch (e) {
+      showToast('Error deleting product.', 'error');
+    }
+  };
+
+  window.resetProductForm = () => {
+    editingProductId = null;
+    ['pName','pPrice','pDiscount','pStock','pDescription','pStorage','pBattery','pRam','pDisplay'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pImages').value = '';
+  document.getElementById('pVideo').value = '';
+  document.getElementById('imagePreviews').innerHTML = '';
+  document.getElementById('videoPreview').innerHTML = '';
+  uploadedImageUrls = [];
+  uploadedVideoUrl = '';
+    document.getElementById('pCategory').value = 'phones';
+    document.getElementById('productFormTitle').textContent = 'Add New Product';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+  };
+
+  // ── SUPPORT ──
+  async function loadSupport() {
+    const snap = await getDocs(collection(db, 'support'));
+    const tbody = document.getElementById('supportTable');
+    if (!snap.size) {
+      tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No support messages yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const s = d.data();
+      return `<tr>
+        <td><strong>${esc(s.name || '-')}</strong></td>
+        <td>${esc(s.email || '-')}</td>
+        <td>${esc((s.message || '').substring(0, 80))}${s.message && s.message.length > 80 ? '...' : ''}</td>
+        <td><span class="badge badge-${s.status === 'resolved' ? 'resolved' : 'open'}">${s.status || 'open'}</span></td>
+        <td>
+          <button class="btn btn-success" onclick="resolveSupport('${d.id}')">Resolve</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.resolveSupport = async (id) => {
+    try {
+      await updateDoc(doc(db, 'support', id), { status: 'resolved' });
+      showToast('Marked as resolved!', 'success');
+      loadSupport();
+      loadDashboard();
+    } catch (e) {
+      showToast('Error updating message.', 'error');
+    }
+  };
+
+  // ── USERS ──
+  async function loadUsers() {
+    const snap = await getDocs(collection(db, 'users'));
+    const tbody = document.getElementById('usersTable');
+    if (!snap.size) {
+      tbody.innerHTML = `<tr><td colspan="3" class="empty-state">No users found in database.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const u = d.data();
+      return `<tr>
+        <td><strong>${esc(u.displayName || u.name || '-')}</strong></td>
+        <td>${esc(u.email || '-')}</td>
+        <td style="font-size:11px;color:var(--gray-400);">${d.id}</td>
+      </tr>`;
+    }).join('');
+  }
+async function loadOrders() {
+    const snap = await getDocs(collection(db, 'orders'));
+    const tbody = document.getElementById('ordersTable');
+    if (!snap.size) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No orders yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const o = d.data();
+      const date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString() : '-';
+      return `<tr>
+        <td><strong>${esc(o.orderId || d.id)}</strong></td>
+        <td>${esc(o.customer || '-')}</td>
+        <td>${esc(o.product || '-')}</td>
+        <td>₦${Number(o.amount || 0).toLocaleString('en-NG')}</td>
+        <td><span class="badge badge-${o.status === 'delivered' ? 'resolved' : 'open'}">${o.status || 'pending'}</span></td>
+        <td style="display:flex;gap:8px;">
+          ${o.status !== 'delivered' ? `<button class="btn btn-success" onclick="approveOrder('${d.id}','${o.referredBy || ''}',${o.amount || 0})">Approve Delivery</button>` : 'Delivered'}
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function loadWithdrawals() {
+    const snap = await getDocs(collection(db, 'withdrawals'));
+    const tbody = document.getElementById('withdrawalsTable');
+    if (!snap.size) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state">No withdrawal requests yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = snap.docs.map(d => {
+      const w = d.data();
+      return `<tr>
+        <td><strong>${esc(w.partnerName || '-')}</strong></td>
+        <td>₦${Number(w.amount || 0).toLocaleString('en-NG')}</td>
+        <td>${esc(w.bank || '-')}</td>
+        <td>${esc(w.account || '-')}</td>
+        <td><span class="badge badge-${w.status === 'approved' ? 'resolved' : 'open'}">${w.status || 'pending'}</span></td>
+        <td style="display:flex;gap:8px;">
+          ${w.status !== 'approved' ? `
+            <button class="btn btn-success" onclick="approveWithdrawal('${d.id}','${w.partnerId || ''}',${w.amount || 0})">Approve</button>
+            <button class="btn btn-danger" onclick="rejectWithdrawal('${d.id}')">Reject</button>
+          ` : 'Approved'}
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.approveOrder = async (orderId, partnerId, amount) => {
+    if (!confirm('Approve this delivery? This will add 10% commission to the partner.')) return;
+    try {
+      await updateDoc(doc(db, 'orders', orderId), { status: 'delivered' });
+      if (partnerId && partnerId !== 'undefined' && partnerId !== '') {
+        const partnerSnap = await getDoc(doc(db, 'partners', partnerId));
+        if (partnerSnap.exists()) {
+          const current = Number(partnerSnap.data().earnings || 0);
+          const commission = Math.round(amount * 0.1);
+          await updateDoc(doc(db, 'partners', partnerId), {
+            earnings: current + commission,
+            referrals: (partnerSnap.data().referrals || 0) + 1
+          });
+          showToast('Order approved! ₦' + commission.toLocaleString() + ' commission added.', 'success');
+        } else {
+          showToast('Order approved! No partner found.', 'success');
+        }
+      } else {
+        showToast('Order approved!', 'success');
+      }
+      loadOrders();
+    } catch (e) {
+      showToast('Error approving order.', 'error');
+    }
+  };
+  window.approveWithdrawal = async (withdrawalId, partnerId, amount) => {
+    if (!confirm('Approve this withdrawal?')) return;
+    try {
+      await updateDoc(doc(db, 'withdrawals', withdrawalId), { status: 'approved' });
+      if (partnerId) {
+        const partnerSnap = await getDoc(doc(db, 'partners', partnerId));
+        if (partnerSnap.exists()) {
+          const withdrawn = Number(partnerSnap.data().withdrawn || 0);
+          await updateDoc(doc(db, 'partners', partnerId), {
+            withdrawn: withdrawn + amount
+          });
+        }
+      }
+      showToast('Withdrawal approved!', 'success');
+      loadWithdrawals();
+    } catch (e) {
+      showToast('Error approving withdrawal.', 'error');
+    }
+  };
+
+  window.rejectWithdrawal = async (withdrawalId) => {
+    if (!confirm('Reject this withdrawal?')) return;
+    try {
+      await updateDoc(doc(db, 'withdrawals', withdrawalId), { status: 'rejected' });
+      showToast('Withdrawal rejected.', 'success');
+      loadWithdrawals();
+    } catch (e) {
+      showToast('Error rejecting withdrawal.', 'error');
+    }
+  };
+  // ── UTILS ──
+  function esc(str) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(str)));
+    return d.innerHTML;
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.className = `toast ${type}`;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
