@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SL Global Partner Program</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #F76B1C;
+      --orange-dark: #D95A0D;
+      --orange-light: #FF8C42;
+      --blue: #1A3A6B;
+      --blue-mid: #2255A0;
+      --white: #FFFFFF;
+      --off-white: #F5F7FA;
+      --gray-100: #EEF1F6;
+      --gray-200: #D8DEE9;
+      --gray-400: #9AA3B2;
+      --gray-600: #5A6478;
+      --gray-800: #2D3444;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+      --radius: 10px;
+      --radius-lg: 16px;
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--off-white);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--white);
+      border-bottom: 2px solid var(--orange);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+    }
+
+    .navbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-wrap img { height: 40px; border-radius: 6px; }
+
+    .logo-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 1px;
+    }
+    .logo-text span { color: var(--orange); }
+
+    .back-btn {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition);
+    }
+    .back-btn:hover { background: var(--orange); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+      padding: 60px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(32px, 6vw, 58px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span { color: var(--orange-light); }
+
+    .hero-sub {
+      color: rgba(255,255,255,0.75);
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-commission {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 20px 32px;
+      margin-bottom: 32px;
+    }
+
+    .commission-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      color: var(--orange-light);
+      line-height: 1;
+    }
+
+    .commission-label {
+      text-align: left;
+      color: var(--white);
+    }
+
+    .commission-label strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .commission-label span {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(247,107,28,0.4);
+      transition: all var(--transition);
+    }
+
+    .hero-cta:hover {
+      background: var(--orange-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--blue);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 14px;
+      margin-bottom: 40px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--gray-100);
+      transition: transform var(--transition);
+    }
+
+    .step-card:hover { transform: translateY(-4px); }
+
+    .step-num {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 auto 16px;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gray-800);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ── BENEFITS ── */
+    .benefits-section {
+      background: var(--blue);
+      padding: 60px 20px;
+    }
+
+    .benefits-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .benefits-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .benefit-card {
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      transition: background var(--transition);
+    }
+
+    .benefit-card:hover { background: rgba(255,255,255,0.14); }
+
+    .benefit-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--orange);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: var(--white);
+    }
+
+    .benefit-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .benefit-desc {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    /* ── SIGNUP / DASHBOARD ── */
+    .form-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .form-card-header {
+      background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+      padding: 28px 32px;
+      text-align: center;
+    }
+
+    .form-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .form-card-sub {
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+    }
+
+    .form-card-body { padding: 28px 32px; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 7px;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color var(--transition);
+      background: var(--white);
+    }
+
+    .form-group input:focus, .form-group select:focus { border-color: var(--blue); }
+
+    .form-submit {
+      width: 100%;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition);
+      margin-top: 8px;
+    }
+
+    .form-submit:hover { background: var(--orange-dark); }
+    .form-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .form-error { color: #E53E3E; font-size: 13px; margin-bottom: 12px; font-weight: 600; }
+    .form-success {
+      background: #F0FFF4;
+      border: 1.5px solid #68D391;
+      border-radius: 8px;
+      padding: 14px;
+      color: #276749;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ── DASHBOARD ── */
+    .dashboard { display: none; padding: 32px 20px; max-width: 800px; margin: 0 auto; }
+
+    .dash-welcome {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 24px;
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .dash-stat {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--orange);
+      text-align: center;
+    }
+
+    .dash-stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .dash-stat-label { font-size: 12px; color: var(--gray-400); font-weight: 600; margin-top: 4px; }
+
+    .ref-link-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+
+    .ref-link-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ref-link-box {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .ref-link-input {
+      flex: 1;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      background: var(--off-white);
+      outline: none;
+    }
+
+    .copy-btn {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 11px 18px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+    .copy-btn:hover { background: var(--orange); }
+
+    .share-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition);
+      color: var(--white);
+      min-width: 120px;
+    }
+
+    .share-btn:hover { opacity: 0.88; }
+    .share-wa { background: #25D366; }
+    .share-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-pending { background: #FFF5DC; color: #B7791F; }
+    .status-approved { background: #F0FFF4; color: #276749; }
+    .status-rejected { background: #FFF5F5; color: #E53E3E; }
+
+    .signout-link {
+      background: none;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-600);
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all var(--transition);
+    }
+
+    .signout-link:hover { background: #E53E3E; color: white; border-color: #E53E3E; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gray-800);
+      color: var(--white);
+      padding: 13px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-lg);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 4px solid #48BB78; }
+    .toast.error { border-left: 4px solid #E53E3E; }
+    .toast.info { border-left: 4px solid #3B74C8; }
+
+    @media (max-width: 480px) {
+      .form-card-body { padding: 20px 16px; }
+      .hero-commission { flex-direction: column; gap: 8px; padding: 16px 20px; }
+      .commission-num { font-size: 48px; }
+      .commission-label { text-align: center; }
+      .dash-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="logo-wrap" href="sl.html">
+      <img src="https://i.postimg.cc/hj5zjvxy/IMG-20260509-WA0082.jpg" alt="SL Global" />
+      <span class="logo-text">SL <span>Global</span></span>
+    </a>
+    <a class="back-btn" href="sl.html">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Shop
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;">
+    <span class="hero-tag">Partner Program</span>
+    <h1 class="hero-title">Earn Money Promoting<br><span>SL Global</span></h1>
+    <p class="hero-sub">Join Nigeria's fastest growing electronics affiliate program. Share your unique link and earn 10% commission on every sale you refer.</p>
+
+    <div class="hero-commission">
+      <div class="commission-num">10%</div>
+      <div class="commission-label">
+        <strong>Commission Per Sale</strong>
+        <span>Paid directly to you</span>
+      </div>
+    </div>
+
+    <br>
+    <a class="hero-cta" href="#signup">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Join Now — It's Free
+    </a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">Start earning in 3 simple steps</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">Sign Up Free</div>
+      <div class="step-desc">Create your partner account below. No fees, no experience needed. Anyone can join!</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">Share Your Link</div>
+      <div class="step-desc">Get your unique referral link and share it on WhatsApp, Instagram, Facebook or anywhere.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">Earn 10% commission</div>
+      <div class="step-desc">When someone buys from SL Global using your link, you earn 10% of the order value. Simple!</div>
+    </div>
+  </div>
+</div>
+
+<!-- BENEFITS -->
+<div class="benefits-section">
+  <div class="benefits-inner">
+    <div class="benefits-title">Why Join SL Global Partners?</div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="benefit-title">High Commission</div>
+        <div class="benefit-desc">10% per sale — one of the highest rates in Nigeria's electronics market</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+        </div>
+        <div class="benefit-title">Share Anywhere</div>
+        <div class="benefit-desc">WhatsApp, Instagram, TikTok, Facebook — share your link anywhere you have followers</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="benefit-title">100% Authentic Products</div>
+        <div class="benefit-desc">Promote products you can trust. All SL Global products are genuine and verified</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="benefit-title">No Limit</div>
+        <div class="benefit-desc">Refer as many customers as you want. The more you share, the more you earn!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP FORM -->
+<div class="form-section" id="signup">
+
+  <!-- LOGIN/REGISTER FORM — shows when not logged in -->
+  <div id="authSection" style="display:none;">
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="form-card-title">Join Partner Program</div>
+      <div class="form-card-sub">Sign in on the main store first</div>
+    </div>
+    <div class="form-card-body" style="text-align:center;padding:32px;">
+      <p style="color:var(--gray-600);font-size:14px;margin-bottom:20px;">
+        You need to sign in on SL Global first before joining the partner program.
+      </p>
+      <a href="sl.html" class="form-submit" style="display:inline-block;text-decoration:none;padding:14px 32px;">
+        Go to Main Store to Sign In
+      </a>
+    </div>
+  </div>
+</div>
+
+<div id="notPartnerSection" style="display:none;">
+  <div class="form-card">
+    <div class="form-card-header">
+      <div class="form-card-title">You're In! 🎉</div>
+      <div class="form-card-sub">One click to activate your referral link</div>
+    </div>
+    <div class="form-card-body" style="text-align:center;padding:32px;">
+      <p style="color:var(--gray-600);font-size:14px;margin-bottom:20px;">
+        You are signed in. Click the button below to join the partner program and get your referral link.
+      </p>
+      <button class="form-submit" onclick="joinPartner()">
+        Join Partner Program — It's Free
+      </button>
+    </div>
+  </div>
+</div>
+  <!-- DASHBOARD — shows when logged in -->
+  <div class="dashboard" id="dashboard">
+    <div class="dash-welcome" id="dashWelcome">Welcome back!</div>
+
+    <div style="margin-bottom:16px;">
+      <span class="status-badge status-pending" id="statusBadge">Pending Approval</span>
+    </div>
+
+    <div class="dash-stats">
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="dashClicks">0</div>
+        <div class="dash-stat-label">Link Clicks</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="dashReferrals">0</div>
+        <div class="dash-stat-label">Referrals</div>
+      </div>
+      <div class="dash-stat">
+        <div class="dash-stat-num" id="dashEarnings">₦0</div>
+        <div class="dash-stat-label">Total Earned</div>
+      </div>
+      <div class="dash-stat" style="border-left-color:#48BB78;">
+        <div class="dash-stat-num" id="dashBalance" style="color:#276749;">₦0</div>
+        <div class="dash-stat-label">Available Balance</div>
+      </div>
+    </div>
+
+    <div class="ref-link-card">
+      <div class="ref-link-title">Your Referral Link</div>
+      <div class="ref-link-box">
+        <input class="ref-link-input" id="refLinkInput" readonly />
+        <button class="copy-btn" onclick="copyRefLink()">Copy</button>
+      </div>
+      <div class="share-btns">
+        <button class="share-btn share-wa" onclick="shareWhatsApp()">Share on WhatsApp</button>
+        <button class="share-btn share-ig" onclick="shareInstagram()">Copy for Instagram</button>
+      </div>
+    </div>
+
+<!-- WITHDRAWAL SECTION -->
+    <div class="ref-link-card" id="withdrawSection">
+      <div class="ref-link-title">Request Withdrawal</div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Amount (₦)</label>
+        <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw" style="width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;outline:none;" />
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Bank</label>
+        <div style="position:relative;">
+          <input type="text" id="bankSearch" placeholder="Search bank..." oninput="filterBanks(this.value)" style="width:100%;border:1.5px solid var(--gray-200);border-radius:8px 8px 0 0;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;outline:none;" />
+          <div id="bankDropdown" style="border:1.5px solid var(--gray-200);border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;display:none;background:white;position:absolute;width:100%;z-index:10;"></div>
+        </div>
+        <input type="hidden" id="selectedBank" />
+      </div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label style="font-size:12px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Account Number</label>
+        <input type="text" id="withdrawAccount" placeholder="Enter 10-digit account number" maxlength="10" style="width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:11px 14px;font-family:'Barlow',sans-serif;font-size:14px;outline:none;" />
+      </div>
+      <button onclick="requestWithdrawal()" style="width:100%;background:var(--blue);color:white;border:none;border-radius:8px;padding:13px;font-family:'Barlow',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Request Withdrawal</button>
+    </div>
+
+    <!-- SUCCESS POPUP -->
+    <div id="withdrawPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:white;border-radius:16px;padding:32px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <div style="width:64px;height:64px;background:#F0FFF4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+          <svg width="32" height="32" fill="none" stroke="#48BB78" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--blue);margin-bottom:10px;">Withdrawal Requested!</div>
+        <p style="font-size:14px;color:var(--gray-600);line-height:1.6;margin-bottom:20px;">Thank you for choosing SL Global! Your commission rewards will be sent to you shortly.</p>
+        <button onclick="closeWithdrawPopup()" style="background:var(--orange);color:white;border:none;border-radius:8px;padding:12px 28px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Done</button>
+      </div>
+    </div>
+
+    <button class="signout-link" onclick="doSignOut()">Sign Out</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, onAuthStateChanged,
+    updateProfile, signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore, collection, doc,
+    setDoc, getDoc, updateDoc, addDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcIQmeqh8NQ72X7hUDL0JrjMpyIB1750w",
+    authDomain: "slglobal-efc79.firebaseapp.com",
+    projectId: "slglobal-efc79",
+    storageBucket: "slglobal-efc79.firebasestorage.app",
+    messagingSenderId: "13344924891",
+    appId: "1:13344924891:web:cb682b3c2bf1069375d8fe"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const STORE_URL = 'https://slglobal.vercel.app';
+const COMMISSION_RATE = 0.11;
+
+  let partnerData = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const snap = await getDoc(doc(db, 'partners', user.uid));
+      
+      if (snap.exists()) {
+        // User is already a partner — show dashboard
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('notPartnerSection').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        partnerData = snap.data();
+        document.getElementById('dashWelcome').textContent = 'Welcome, ' + (partnerData.name || user.displayName || 'Partner') + '!';
+        document.getElementById('dashClicks').textContent = partnerData.clicks || 0;
+        document.getElementById('dashReferrals').textContent = partnerData.referrals || 0;
+        const earnings = Number(partnerData.earnings || 0);
+        const withdrawn = Number(partnerData.withdrawn || 0);
+        const balance = earnings - withdrawn;
+        document.getElementById('dashEarnings').textContent = '₦' + earnings.toLocaleString();
+        document.getElementById('dashBalance').textContent = '₦' + balance.toLocaleString();
+        const refCode = partnerData.refCode || user.uid.slice(0, 8);
+        document.getElementById('refLinkInput').value = STORE_URL + '/?ref=' + refCode;
+        const badge = document.getElementById('statusBadge');
+        const status = partnerData.status || 'pending';
+        badge.textContent = status === 'approved' ? 'Approved' : status === 'rejected' ? 'Rejected' : 'Pending Approval';
+        badge.className = 'status-badge status-' + (status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending');
+      } else {
+        // User is logged in but not a partner yet — show join button
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('notPartnerSection').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+      }
+    } else {
+      // User is not logged in — tell them to go to main store
+      document.getElementById('authSection').style.display = 'block';
+      document.getElementById('notPartnerSection').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+  });
+
+window.joinPartner = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    try {
+      const refCode = (user.displayName || user.email.split('@')[0])
+        .toLowerCase()
+        .replace(/\s+/g, '') + Math.floor(Math.random() * 1000);
+      
+      await setDoc(doc(db, 'partners', user.uid), {
+        name: user.displayName || '',
+        email: user.email || '',
+        refCode,
+        referredBy: localStorage.getItem('slg_ref') || '',
+        status: 'approved',
+        clicks: 0,
+        referrals: 0,
+        earnings: 0,
+        withdrawn: 0,
+        createdAt: serverTimestamp()
+      });
+      
+      showToast('Welcome to the partner program!', 'success');
+    } catch (e) {
+      showToast('Something went wrong. Try again.', 'error');
+    }
+  };
+  window.doSignOut = async () => {
+    await signOut(auth);
+    showToast('Signed out.', 'info');
+  };
+
+const NIGERIAN_BANKS = [
+    'Access Bank', 'Citibank Nigeria', 'Ecobank Nigeria', 'Fidelity Bank',
+    'First Bank of Nigeria', 'First City Monument Bank (FCMB)', 'Globus Bank',
+    'Guaranty Trust Bank (GTBank)', 'Heritage Bank', 'Keystone Bank',
+    'Kuda Bank', 'Opay', 'Palmpay', 'Polaris Bank', 'Providus Bank',
+    'Stanbic IBTC Bank', 'Standard Chartered Bank', 'Sterling Bank',
+    'SunTrust Bank', 'Titan Trust Bank', 'Union Bank of Nigeria',
+    'United Bank for Africa (UBA)', 'Unity Bank', 'VFD Microfinance Bank',
+    'Wema Bank', 'Zenith Bank', 'Moniepoint', 'Carbon', 'Rubies Bank',
+    'Sparkle Bank', 'TAJBank', 'Lotus Bank', 'Coronation Bank'
+  ];
+
+  window.filterBanks = (query) => {
+    const dropdown = document.getElementById('bankDropdown');
+    const filtered = NIGERIAN_BANKS.filter(b => b.toLowerCase().includes(query.toLowerCase()));
+    if (!query || !filtered.length) { dropdown.style.display = 'none'; return; }
+    dropdown.style.display = 'block';
+    dropdown.innerHTML = filtered.map(b =>
+      '<div onclick="selectBank(\'' + b + '\')" style="padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid #EEF1F6;font-family:Barlow,sans-serif;" onmouseover="this.style.background=\'#F5F7FA\'" onmouseout="this.style.background=\'white\'">' + b + '</div>'
+    ).join('');
+  };
+
+  window.selectBank = (bank) => {
+    document.getElementById('bankSearch').value = bank;
+    document.getElementById('selectedBank').value = bank;
+    document.getElementById('bankDropdown').style.display = 'none';
+  };
+
+  window.requestWithdrawal = async () => {
+    const amount = Number(document.getElementById('withdrawAmount').value);
+    const bank = document.getElementById('selectedBank').value;
+    const account = document.getElementById('withdrawAccount').value.trim();
+
+    if (!amount || amount <= 0) { showToast('Enter a valid amount.', 'error'); return; }
+    if (!bank) { showToast('Please select a bank.', 'error'); return; }
+    if (!account || account.length !== 10) { showToast('Enter a valid 10-digit account number.', 'error'); return; }
+
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const snap = await getDoc(doc(db, 'partners', user.uid));
+    const data = snap.data();
+    const balance = Number(data.earnings || 0) - Number(data.withdrawn || 0);
+
+    if (amount > balance) {
+      showToast('Insufficient balance! Keep referring your friends!', 'error');
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'withdrawals'), {
+        partnerId: user.uid,
+        partnerName: data.name || '',
+        amount,
+        bank,
+        account,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
+
+      document.getElementById('withdrawPopup').style.display = 'flex';
+      document.getElementById('withdrawAmount').value = '';
+      document.getElementById('bankSearch').value = '';
+      document.getElementById('selectedBank').value = '';
+      document.getElementById('withdrawAccount').value = '';
+    } catch (e) {
+      showToast('Error submitting withdrawal. Try again.', 'error');
+    }
+  };
+
+  window.closeWithdrawPopup = () => {
+    document.getElementById('withdrawPopup').style.display = 'none';
+  };
+
+  window.copyRefLink = () => {
+    const input = document.getElementById('refLinkInput');
+    input.select();
+    document.execCommand('copy');
+    showToast('Referral link copied!', 'success');
+  };
+
+  window.shareWhatsApp = () => {
+    const link = document.getElementById('refLinkInput').value;
+    const msg = encodeURIComponent('Shop premium phones and electronics at SL Global! Use my link for the best deals: ' + link);
+    window.open('https://wa.me/?text=' + msg, '_blank');
+  };
+
+  window.shareInstagram = () => {
+    const link = document.getElementById('refLinkInput').value;
+    navigator.clipboard.writeText('Shop premium phones at SL Global! ' + link);
+    showToast('Copied! Paste in your Instagram bio or story.', 'info');
+  };
+
+  function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.className = 'toast ' + type;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._tt);
+    window._tt = setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
